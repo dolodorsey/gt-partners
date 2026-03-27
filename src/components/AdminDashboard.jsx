@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 const SB = "https://dzlmtvodpyhetvektfuo.supabase.co";
-const SK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6bG10dm9kcHloZXR2ZWt0ZnVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzkyMjMzNDcsImV4cCI6MjA1NDc5OTM0N30.2G_BDi5FhOcQhf5my9_jjJaARB8l3oFfjfJYWnBpxJk";
+const SK = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6bG10dm9kcHloZXR2ZWt0ZnVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODQ4NjQsImV4cCI6MjA4NTE2MDg2NH0.qmnWB4aWdb7U8Iod9Hv8PQAOJO3AG0vYEGnPS--kfAo";
 
 const hdrs = { apikey: SK, Authorization: `Bearer ${SK}`, "Content-Type": "application/json" };
 
