@@ -190,6 +190,7 @@ export default function GTPartnerForm() {
 
   // --- STYLES ---
   const BG_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/hero-bg.png";
+  const LOGO_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/good-times-logo.png";
   const css = {
     root: {
       fontFamily: "'Instrument Sans', 'Helvetica Neue', sans-serif",
@@ -197,11 +198,13 @@ export default function GTPartnerForm() {
       color: "#F0EDE6",
       minHeight: "100vh",
       position: "relative",
-      overflow: "hidden",
     },
     bgImage: {
       position: "fixed",
-      inset: 0,
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
       backgroundImage: `url("${BG_URL}")`,
       backgroundSize: "cover",
       backgroundPosition: "center",
@@ -210,8 +213,11 @@ export default function GTPartnerForm() {
     },
     bgOverlay: {
       position: "fixed",
-      inset: 0,
-      background: "linear-gradient(180deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.75) 40%, rgba(0,0,0,0.85) 100%)",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      background: "linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.72) 40%, rgba(0,0,0,0.82) 100%)",
       zIndex: 0,
     },
     grain: {
@@ -557,6 +563,7 @@ export default function GTPartnerForm() {
         <div style={css.bgOverlay} />
         <div style={css.grain} />
         <div style={{ ...css.container, ...css.successWrap }}>
+          <img src={LOGO_URL} alt="Good Times" style={{width: 180, maxWidth: "55%", height: "auto", marginBottom: 24, filter: "drop-shadow(0 4px 20px rgba(212,168,83,0.3))"}} />
           <div style={css.successIcon}>✓</div>
           <div style={css.successTitle}>APPLICATION RECEIVED</div>
           <div style={css.successText}>
@@ -566,7 +573,7 @@ export default function GTPartnerForm() {
             {form.wants_ad_space && " An ad placement specialist will contact you about available inventory."}
           </div>
           <div style={{ marginTop: 40, fontSize: 12, color: "#555", letterSpacing: 3, textTransform: "uppercase" }}>
-            GOOD TIMES WORLDWIDE
+            <img src={LOGO_URL} alt="" style={{width:100,height:"auto",opacity:0.3,display:"block",margin:"0 auto"}} />
           </div>
         </div>
       </div>
@@ -583,7 +590,7 @@ export default function GTPartnerForm() {
       <div style={css.container}>
         {/* HEADER */}
         <div style={css.header}>
-          <div style={css.logo}>GOOD TIMES</div>
+          <img src={LOGO_URL} alt="Good Times" style={{width: 200, maxWidth: "60%", height: "auto", marginBottom: 12, filter: "drop-shadow(0 4px 20px rgba(212,168,83,0.3))"}} />
           <div style={css.title}>PARTNER APPLICATION</div>
           <div style={css.subtitle}>
             Get your venue, brand, or event featured on Good Times — the premier nightlife, dining & entertainment app. Submit your details below for review.
@@ -994,7 +1001,7 @@ export default function GTPartnerForm() {
 
         {/* FOOTER */}
         <div style={{ textAlign: "center", marginTop: 40, padding: "24px 0" }}>
-          <div style={{ fontSize: 10, letterSpacing: 4, color: "#333", textTransform: "uppercase" }}>
+          <div style={{ fontSize: 10, letterSpacing: 4, color: "#333", textTransform: "uppercase" }}><img src={LOGO_URL} alt="Good Times" style={{width: 120, height: "auto", opacity: 0.3, marginBottom: 8, display: "block", margin: "0 auto 8px"}} />
             THE KOLLECTIVE HOSPITALITY GROUP
           </div>
           <div style={{ fontSize: 10, color: "#222", marginTop: 8 }}>

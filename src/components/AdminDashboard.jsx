@@ -114,10 +114,11 @@ export default function GTAdminDashboard() {
   };
 
   const BG_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/hero-bg.png";
+  const LOGO_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/good-times-logo.png";
   const css = {
     root: { fontFamily: "'Instrument Sans', 'Helvetica Neue', sans-serif", background: "#080808", color: "#F0EDE6", minHeight: "100vh", position: "relative" },
-    bgImage: { position: "fixed", inset: 0, backgroundImage: `url("${BG_URL}")`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", zIndex: 0 },
-    bgOverlay: { position: "fixed", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.82) 40%, rgba(0,0,0,0.9) 100%)", zIndex: 0 },
+    bgImage: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundImage: `url("${BG_URL}")`, backgroundSize: "cover", backgroundPosition: "center", zIndex: 0 },
+    bgOverlay: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.80) 40%, rgba(0,0,0,0.88) 100%)", zIndex: 0 },
     grain: { position: "fixed", inset: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`, pointerEvents: "none", zIndex: 1 },
     container: { maxWidth: 1200, margin: "0 auto", padding: "32px 24px", position: "relative", zIndex: 2 },
     header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 },
@@ -337,7 +338,7 @@ export default function GTAdminDashboard() {
         {/* Header */}
         <div style={css.header}>
           <div>
-            <div style={css.title}>GOOD TIMES</div>
+            <img src={LOGO_URL} alt="Good Times" style={{width: 140, height: "auto", marginBottom: 8, filter: "drop-shadow(0 4px 16px rgba(212,168,83,0.3))"}} />
             <div style={css.h1}>PARTNER COMMAND CENTER</div>
           </div>
           <button style={css.refreshBtn} onClick={load}>REFRESH ↻</button>
