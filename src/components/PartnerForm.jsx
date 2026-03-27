@@ -189,6 +189,7 @@ export default function GTPartnerForm() {
   };
 
   // --- STYLES ---
+  const BG_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/hero-bg.png";
   const css = {
     root: {
       fontFamily: "'Instrument Sans', 'Helvetica Neue', sans-serif",
@@ -197,6 +198,21 @@ export default function GTPartnerForm() {
       minHeight: "100vh",
       position: "relative",
       overflow: "hidden",
+    },
+    bgImage: {
+      position: "fixed",
+      inset: 0,
+      backgroundImage: `url("${BG_URL}")`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundRepeat: "no-repeat",
+      zIndex: 0,
+    },
+    bgOverlay: {
+      position: "fixed",
+      inset: 0,
+      background: "linear-gradient(180deg, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.75) 40%, rgba(0,0,0,0.85) 100%)",
+      zIndex: 0,
     },
     grain: {
       position: "fixed",
@@ -266,12 +282,14 @@ export default function GTPartnerForm() {
       cursor: "default",
     }),
     card: {
-      background: "rgba(255,255,255,0.02)",
-      border: "1px solid rgba(255,255,255,0.06)",
+      background: "rgba(10,10,10,0.65)",
+      border: "1px solid rgba(255,255,255,0.08)",
       borderRadius: 16,
       padding: "36px 32px",
       marginBottom: 24,
-      backdropFilter: "blur(20px)",
+      backdropFilter: "blur(24px)",
+      WebkitBackdropFilter: "blur(24px)",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
     },
     sectionTitle: {
       fontSize: 11,
@@ -535,6 +553,8 @@ export default function GTPartnerForm() {
   if (submitted) {
     return (
       <div style={css.root}>
+        <div style={css.bgImage} />
+        <div style={css.bgOverlay} />
         <div style={css.grain} />
         <div style={{ ...css.container, ...css.successWrap }}>
           <div style={css.successIcon}>✓</div>
@@ -556,6 +576,8 @@ export default function GTPartnerForm() {
   return (
     <div style={css.root} ref={formRef}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+      <div style={css.bgImage} />
+      <div style={css.bgOverlay} />
       <div style={css.grain} />
 
       <div style={css.container}>

@@ -43,8 +43,9 @@ function Badge({ status }) {
 function StatCard({ label, value, accent }) {
   return (
     <div style={{
-      flex: 1, minWidth: 140, background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)",
+      flex: 1, minWidth: 140, background: "rgba(10,10,10,0.5)", border: "1px solid rgba(255,255,255,0.08)",
       borderRadius: 12, padding: "20px 24px", textAlign: "center",
+      backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
     }}>
       <div style={{ fontSize: 32, fontWeight: 800, color: accent || "#F0EDE6", lineHeight: 1 }}>{value}</div>
       <div style={{ fontSize: 10, letterSpacing: 3, textTransform: "uppercase", color: "#666", marginTop: 8, fontWeight: 600 }}>{label}</div>
@@ -112,15 +113,18 @@ export default function GTAdminDashboard() {
     ads: apps.filter((a) => a.wants_ad_space).length,
   };
 
+  const BG_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/hero-bg.png";
   const css = {
     root: { fontFamily: "'Instrument Sans', 'Helvetica Neue', sans-serif", background: "#080808", color: "#F0EDE6", minHeight: "100vh", position: "relative" },
+    bgImage: { position: "fixed", inset: 0, backgroundImage: `url("${BG_URL}")`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", zIndex: 0 },
+    bgOverlay: { position: "fixed", inset: 0, background: "linear-gradient(180deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.82) 40%, rgba(0,0,0,0.9) 100%)", zIndex: 0 },
     grain: { position: "fixed", inset: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`, pointerEvents: "none", zIndex: 1 },
     container: { maxWidth: 1200, margin: "0 auto", padding: "32px 24px", position: "relative", zIndex: 2 },
     header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 32 },
     title: { fontSize: 11, letterSpacing: 5, textTransform: "uppercase", color: "#C8A96E", fontWeight: 600 },
     h1: { fontSize: 28, fontWeight: 800, margin: "4px 0 0", letterSpacing: -0.5 },
     statsRow: { display: "flex", gap: 12, marginBottom: 32, flexWrap: "wrap" },
-    tabs: { display: "flex", gap: 4, marginBottom: 24, background: "rgba(255,255,255,0.02)", borderRadius: 10, padding: 4, border: "1px solid rgba(255,255,255,0.04)" },
+    tabs: { display: "flex", gap: 4, marginBottom: 24, background: "rgba(10,10,10,0.5)", borderRadius: 10, padding: 4, border: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" },
     tab: (active) => ({
       padding: "10px 24px", borderRadius: 8, fontSize: 12, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase",
       cursor: "pointer", background: active ? "rgba(200,169,110,0.12)" : "transparent",
@@ -133,15 +137,17 @@ export default function GTAdminDashboard() {
       color: "#F0EDE6", fontSize: 13, outline: "none", fontFamily: "inherit", cursor: "pointer",
     },
     card: {
-      background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12,
+      background: "rgba(10,10,10,0.55)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 12,
       marginBottom: 8, overflow: "hidden", cursor: "pointer", transition: "all 0.2s",
+      backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
     },
     cardHeader: { display: "flex", justifyContent: "space-between", alignItems: "center", padding: "16px 20px", gap: 16 },
     cardName: { fontSize: 16, fontWeight: 700, flex: 1 },
     cardMeta: { fontSize: 12, color: "#777", marginTop: 2 },
     detailPanel: {
-      background: "rgba(0,0,0,0.3)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 14,
-      padding: 28, marginBottom: 24,
+      background: "rgba(10,10,10,0.7)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 14,
+      padding: 28, marginBottom: 24, backdropFilter: "blur(24px)", WebkitBackdropFilter: "blur(24px)",
+      boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
     },
     detailGrid: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 24 },
     detailItem: { marginBottom: 12 },
@@ -158,7 +164,8 @@ export default function GTAdminDashboard() {
     },
     adRow: {
       display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", gap: 12, padding: "14px 20px", alignItems: "center",
-      background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", borderRadius: 10, marginBottom: 6,
+      background: "rgba(10,10,10,0.5)", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 10, marginBottom: 6,
+      backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)",
     },
     refreshBtn: {
       padding: "8px 16px", borderRadius: 8, fontSize: 11, fontWeight: 700, letterSpacing: 1, textTransform: "uppercase",
@@ -322,6 +329,8 @@ export default function GTAdminDashboard() {
   return (
     <div style={css.root}>
       <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+      <div style={css.bgImage} />
+      <div style={css.bgOverlay} />
       <div style={css.grain} />
 
       <div style={css.container}>
