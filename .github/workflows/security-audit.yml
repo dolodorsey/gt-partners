@@ -1,0 +1,44 @@
+name: Audit Good Times Partners
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - agent/direct-partner-role-forms-2026-07-26
+
+permissions:
+  contents: read
+
+jobs:
+  audit-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: package.json
+      - name: Clean install
+        run: npm install --no-audit
+      - name: Capture audit
+        shell: bash
+        run: |
+          set +e
+          npm audit --json > npm-audit.json
+          echo $? > npm-audit-status.txt
+          exit 0
+      - name: Build all partner routes
+        run: npm run build
+      - name: Upload audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gt-partners-npm-audit
+          path: |
+            npm-audit.json
+            npm-audit-status.txt
