@@ -1,6 +1,12 @@
 "use client";
-import AdminDashboard from '../../components/AdminDashboard';
+
+import AdminDashboard from "../../components/AdminDashboard";
+import SecureAdminGate from "../../components/SecureAdminGate";
 
 export default function Admin() {
-  return <AdminDashboard />;
+  return (
+    <SecureAdminGate>
+      <AdminDashboard />
+    </SecureAdminGate>
+  );
 }
