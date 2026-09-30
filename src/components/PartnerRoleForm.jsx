@@ -72,48 +72,80 @@ export default function PartnerRoleForm({ roleType }) {
     setMessage("");
 
     try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/gt_partner_role_requests`, {
-        method: "POST",
-        headers: {
-          apikey: SUPABASE_ANON,
-          Authorization: `Bearer ${SUPABASE_ANON}`,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({
-          role_type: roleType,
-          full_name: form.full_name.trim(),
-          email: form.email.trim().toLowerCase(),
-          phone: form.phone.trim(),
-          city: form.city.trim(),
-          instagram_handle: form.instagram_handle.trim() || null,
-          website: form.website.trim() || null,
-          audience_size: form.audience_size.trim() || null,
-          experience: form.experience.trim(),
-          details: {
-            reason: form.reason.trim(),
-            availability: form.availability.trim() || null,
+      const isAmbassador = roleType === "ambassador";
+      const response = await fetch(
+        isAmbassador
+          ? `${SUPABASE_URL}/functions/v1/ambassador-intake`
+          : `${SUPABASE_URL}/rest/v1/gt_partner_role_requests`,
+        {
+          method: "POST",
+          headers: isAmbassador
+            ? { "Content-Type": "application/json" }
+            : {
+                apikey: SUPABASE_ANON,
+                Authorization: `Bearer ${SUPABASE_ANON}`,
+                "Content-Type": "application/json",
+                Prefer: "return=minimal",
+              },
+          body: JSON.stringify(isAmbassador ? {
+            brand_key: "good_times",
+            full_name: form.full_name.trim(),
+            email: form.email.trim().toLowerCase(),
+            phone: form.phone.trim(),
+            city: form.city.trim(),
+            instagram_handle: form.instagram_handle.trim(),
             tiktok_handle: form.tiktok_handle.trim() || null,
+            website: form.website.trim() || null,
+            audience_size: form.audience_size.trim() || null,
             average_story_views: form.average_story_views.trim() || null,
             average_reel_views: form.average_reel_views.trim() || null,
-            content_category: form.content_category.trim() || null,
+            content_lane: form.content_category.trim(),
             referral_source: form.referral_source.trim() || null,
-            monthly_content_commitment: form.monthly_content_commitment.trim() || null,
-            launch_market: "atlanta",
-          },
-          consent: Boolean(form.consent),
-          status: "new",
-          source: "good-times-partner-role-form",
-        }),
-      });
+            monthly_commitment: form.monthly_content_commitment.trim() || null,
+            experience: form.experience.trim(),
+            why_you: form.reason.trim(),
+            availability: form.availability.trim() || null,
+            consent: Boolean(form.consent),
+            source: "partners.thegoodtimesworldwide.com/ambassador",
+          } : {
+            role_type: roleType,
+            full_name: form.full_name.trim(),
+            email: form.email.trim().toLowerCase(),
+            phone: form.phone.trim(),
+            city: form.city.trim(),
+            instagram_handle: form.instagram_handle.trim() || null,
+            website: form.website.trim() || null,
+            audience_size: form.audience_size.trim() || null,
+            experience: form.experience.trim(),
+            details: {
+              reason: form.reason.trim(),
+              availability: form.availability.trim() || null,
+              tiktok_handle: form.tiktok_handle.trim() || null,
+              average_story_views: form.average_story_views.trim() || null,
+              average_reel_views: form.average_reel_views.trim() || null,
+              content_category: form.content_category.trim() || null,
+              referral_source: form.referral_source.trim() || null,
+              monthly_content_commitment: form.monthly_content_commitment.trim() || null,
+              launch_market: "atlanta",
+            },
+            consent: Boolean(form.consent),
+            status: "new",
+            source: "good-times-partner-role-form",
+          }),
+        }
+      );
 
-      if (!response.ok) {
-        const error = await response.json().catch(() => null);
-        throw new Error(error?.message || "Your application could not be submitted.");
+      const result = await response.json().catch(() => null);
+      if (!response.ok || (isAmbassador && result?.ok !== true)) {
+        throw new Error(result?.error || result?.message || "Your application could not be submitted.");
       }
 
       setStatus("success");
-      setMessage(`Your ${roleType} application was received. The Good Times team will review it and follow up.`);
+      setMessage(
+        isAmbassador && result?.email?.provider_accepted
+          ? "Your ambassador application was received. Check your email for confirmation."
+          : `Your ${roleType} application was received. The Good Times team will review it and follow up.`
+      );
       setForm(initial);
     } catch (error) {
       setStatus("error");
