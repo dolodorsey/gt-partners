@@ -18,6 +18,12 @@ const COPY = {
     description: "Apply to promote Good Times, drive qualified users or business relationships, and participate in approved affiliate opportunities.",
     experienceLabel: "Audience, partnerships or sales experience",
   },
+  ambassador: {
+    eyebrow: "GOOD TIMES AMBASSADOR PROGRAM",
+    title: "Apply to Become a Good Times Ambassador",
+    description: "Good Times ambassadors are local culture connectors who help people discover where to go, what to do, and what is worth showing up for. Atlanta is the current public launch market. Applications are reviewed for brand fit, reliability, local influence, content quality and ability to drive real app activity.",
+    experienceLabel: "Tell us about your Atlanta nightlife, dining, events, culture, creator or community experience",
+  },
 };
 
 const initial = {
@@ -26,8 +32,14 @@ const initial = {
   phone: "",
   city: "",
   instagram_handle: "",
+  tiktok_handle: "",
   website: "",
   audience_size: "",
+  average_story_views: "",
+  average_reel_views: "",
+  content_category: "",
+  referral_source: "",
+  monthly_content_commitment: "",
   experience: "",
   reason: "",
   availability: "",
@@ -46,6 +58,8 @@ export default function PartnerRoleForm({ roleType }) {
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email) &&
     form.phone.replace(/\D/g, "").length >= 10 &&
     form.city.trim().length >= 2 &&
+    (roleType !== "ambassador" || form.instagram_handle.trim().length >= 2) &&
+    (roleType !== "ambassador" || form.content_category.trim().length >= 2) &&
     form.experience.trim().length >= 10 &&
     form.reason.trim().length >= 10 &&
     status !== "submitting"
@@ -79,6 +93,13 @@ export default function PartnerRoleForm({ roleType }) {
           details: {
             reason: form.reason.trim(),
             availability: form.availability.trim() || null,
+            tiktok_handle: form.tiktok_handle.trim() || null,
+            average_story_views: form.average_story_views.trim() || null,
+            average_reel_views: form.average_reel_views.trim() || null,
+            content_category: form.content_category.trim() || null,
+            referral_source: form.referral_source.trim() || null,
+            monthly_content_commitment: form.monthly_content_commitment.trim() || null,
+            launch_market: "atlanta",
           },
           consent: Boolean(form.consent),
           status: "new",
@@ -128,10 +149,16 @@ export default function PartnerRoleForm({ roleType }) {
             <Field label="Email"><input type="email" value={form.email} onChange={(event) => update("email", event.target.value)} autoComplete="email" required style={styles.input} /></Field>
             <Field label="Mobile phone"><input type="tel" value={form.phone} onChange={(event) => update("phone", event.target.value)} autoComplete="tel" required style={styles.input} /></Field>
             <Field label="Primary city"><input value={form.city} onChange={(event) => update("city", event.target.value)} required style={styles.input} /></Field>
-            <Field label="Instagram" optional><input value={form.instagram_handle} onChange={(event) => update("instagram_handle", event.target.value)} placeholder="@username" style={styles.input} /></Field>
+            <Field label={roleType === "ambassador" ? "Instagram" : "Instagram"} optional={roleType !== "ambassador"}><input value={form.instagram_handle} onChange={(event) => update("instagram_handle", event.target.value)} placeholder="@username" style={styles.input} /></Field>
+            {roleType === "ambassador" && <Field label="TikTok" optional><input value={form.tiktok_handle} onChange={(event) => update("tiktok_handle", event.target.value)} placeholder="@username" style={styles.input} /></Field>}
             <Field label="Website / portfolio" optional><input type="url" value={form.website} onChange={(event) => update("website", event.target.value)} style={styles.input} /></Field>
             <Field label="Audience or network size" optional><input value={form.audience_size} onChange={(event) => update("audience_size", event.target.value)} style={styles.input} /></Field>
-            <Field label="Availability" optional><input value={form.availability} onChange={(event) => update("availability", event.target.value)} placeholder="Hours per week, days, or travel availability" style={styles.input} /></Field>
+            {roleType === "ambassador" && <Field label="Average story views" optional><input value={form.average_story_views} onChange={(event) => update("average_story_views", event.target.value)} placeholder="Example: 1,500" style={styles.input} /></Field>}
+            {roleType === "ambassador" && <Field label="Average Reel / video views" optional><input value={form.average_reel_views} onChange={(event) => update("average_reel_views", event.target.value)} placeholder="Example: 8,000" style={styles.input} /></Field>}
+            {roleType === "ambassador" && <Field label="Primary content lane"><input value={form.content_category} onChange={(event) => update("content_category", event.target.value)} placeholder="Nightlife, dining, events, lifestyle, campus, fitness, culture..." required style={styles.input} /></Field>}
+            {roleType === "ambassador" && <Field label="Who invited / referred you?" optional><input value={form.referral_source} onChange={(event) => update("referral_source", event.target.value)} style={styles.input} /></Field>}
+            {roleType === "ambassador" && <Field label="Monthly content commitment" optional><input value={form.monthly_content_commitment} onChange={(event) => update("monthly_content_commitment", event.target.value)} placeholder="Example: 2 Reels + 4 Stories" style={styles.input} /></Field>}
+            <Field label="Availability" optional><input value={form.availability} onChange={(event) => update("availability", event.target.value)} placeholder="Hours per week, days, or event availability" style={styles.input} /></Field>
           </div>
 
           <Field label={meta.experienceLabel}><textarea rows="5" value={form.experience} onChange={(event) => update("experience", event.target.value)} required style={styles.textarea} /></Field>
