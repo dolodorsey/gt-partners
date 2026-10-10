@@ -217,7 +217,7 @@ export default function GTPartnerForm() {
           "Content-Type": "application/json",
           apikey: SUPABASE_ANON,
           Authorization: `Bearer ${SUPABASE_ANON}`,
-          Prefer: "return=representation",
+          Prefer: "return=minimal",
         },
         body: JSON.stringify(payload),
       });
