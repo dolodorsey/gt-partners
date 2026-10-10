@@ -35,6 +35,8 @@ assert.match(read('public/venue-portal/index.html'),/Submit a manual venue appli
 assert.match(read('public/venue-portal/index.html'),/Email signup · Configuration pending/);
 assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_outreach_manual_fallback/);
 assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_id: prefilledVenueId/);
+assert.doesNotMatch(read('src/components/PartnerForm.jsx'),/Authorization:[^\n]*SUPABASE_ANON/);
+assert.match(read('src/components/PartnerForm.jsx'),/headers: \{ apikey: SUPABASE_ANON, Accept:/);
 assert.match(read('public/venue-portal/app.js'),/updateManualApplicationLinks/);
 assert.match(read('public/venue-portal/app.js'),/marketingApplicationUrl/);
 assert.match(read('public/venue-portal/app.js'),/window\.location\.assign\(marketingApplicationUrl/);
