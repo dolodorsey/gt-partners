@@ -235,8 +235,8 @@ export default function GTPartnerForm() {
   };
 
   // --- STYLES ---
-  const BG_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/hero-bg.png";
-  const LOGO_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/good-times-logo.png";
+  // Approved MARKETING folder assets only; retired decorative backgrounds are not reused.
+  const LOGO_URL = "/brand/good-times-official.png";
   const css = {
     root: {
       fontFamily: "'Instrument Sans', 'Helvetica Neue', sans-serif",
@@ -251,7 +251,7 @@ export default function GTPartnerForm() {
       left: 0,
       width: "100%",
       height: "100%",
-      backgroundImage: `url("${BG_URL}")`,
+      backgroundImage: 'radial-gradient(ellipse at 18% 14%, rgba(198,153,72,.21) 0%, transparent 37%), radial-gradient(ellipse at 80% 84%, rgba(148,106,51,.09) 0%, transparent 42%), linear-gradient(125deg,#0a0a0a,#15120e 48%,#0a0a0a)',
       backgroundSize: "cover",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",

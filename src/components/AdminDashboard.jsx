@@ -113,11 +113,11 @@ export default function GTAdminDashboard() {
     ads: apps.filter((a) => a.wants_ad_space).length,
   };
 
-  const BG_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/hero-bg.png";
-  const LOGO_URL = "https://dzlmtvodpyhetvektfuo.supabase.co/storage/v1/object/public/gt-partner-assets/site/good-times-logo.png";
+  // Approved MARKETING folder assets only; retired decorative backgrounds are not reused.
+  const LOGO_URL = "/brand/good-times-official.png";
   const css = {
     root: { fontFamily: "'Instrument Sans', 'Helvetica Neue', sans-serif", background: "#080808", color: "#F0EDE6", minHeight: "100vh", position: "relative" },
-    bgImage: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundImage: `url("${BG_URL}")`, backgroundSize: "cover", backgroundPosition: "center", zIndex: 0 },
+    bgImage: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", backgroundImage: 'radial-gradient(ellipse at 18% 14%, rgba(198,153,72,.21) 0%, transparent 37%), radial-gradient(ellipse at 80% 84%, rgba(148,106,51,.09) 0%, transparent 42%), linear-gradient(125deg,#0a0a0a,#15120e 48%,#0a0a0a)', backgroundSize: "cover", backgroundPosition: "center", zIndex: 0 },
     bgOverlay: { position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "linear-gradient(180deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.80) 40%, rgba(0,0,0,0.88) 100%)", zIndex: 0 },
     grain: { position: "fixed", inset: 0, backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`, pointerEvents: "none", zIndex: 1 },
     container: { maxWidth: 1200, margin: "0 auto", padding: "32px 24px", position: "relative", zIndex: 2 },
