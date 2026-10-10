@@ -25,6 +25,19 @@ const AD_BUDGETS = [
   { value: "1000_plus", label: "$1,000+/month" },
 ];
 
+// Match the official /venues growth menu. These are inquiry categories, not sellable inventory.
+const GROWTH_SERVICES = [
+  { value: "app_advertising", label: "In-app Advertising" },
+  { value: "email_marketing", label: "Email Promotions" },
+  { value: "social_spotlight", label: "Social Spotlights" },
+  { value: "influencer_posts", label: "Creator Posts" },
+  { value: "influencer_visits", label: "Influencer Visits" },
+  { value: "physical_marketing", label: "Physical Marketing" },
+  { value: "event_boost", label: "Event Boosts" },
+  { value: "content_production", label: "Content Production" },
+  { value: "custom_bundle", label: "Custom Growth Bundle" },
+];
+
 const STEPS = [
   { id: 1, label: "BUSINESS INFO", icon: "01" },
   { id: 2, label: "DETAILS & ASSETS", icon: "02" },
@@ -39,6 +52,7 @@ export default function GTPartnerForm() {
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState({});
   const [uploading, setUploading] = useState({});
+  const [growthServices, setGrowthServices] = useState([]);
   const formRef = useRef(null);
 
   const uploadFile = async (file, field) => {
@@ -97,6 +111,11 @@ export default function GTPartnerForm() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const requestedIntent = params.get("intent");
+    if (GROWTH_SERVICES.some((service) => service.value === requestedIntent)) {
+      setGrowthServices([requestedIntent]);
+      setForm((old) => ({ ...old, wants_ad_space: true }));
+    }
     const requestedId = params.get("venue");
     if (!/^[0-9a-f]{8}-[0-9a-f-]{27,36}$/i.test(requestedId || "")) return;
     let active = true;
@@ -190,8 +209,15 @@ export default function GTPartnerForm() {
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
+      const selectedChannels = growthServices
+        .map((value) => GROWTH_SERVICES.find((item) => item.value === value)?.label)
+        .filter(Boolean);
+      const channelNote = form.wants_ad_space && selectedChannels.length
+        ? "GOOD TIMES requested marketing channels: " + selectedChannels.join(", ")
+        : "";
       const payload = {
         ...form,
+        ad_notes: [form.ad_notes.trim(), channelNote].filter(Boolean).join("\n") || null,
         gt_venue_id: prefilledVenueId,
         source: prefilledVenueId ? "gt_venue_outreach_manual_fallback" : "gt_public_partner_application",
         specials: JSON.stringify(form.specials.filter((s) => s.name)),
@@ -969,6 +995,30 @@ export default function GTPartnerForm() {
 
             {form.wants_ad_space && (
               <>
+                <div style={css.field}>
+                  <label style={css.label}>PROMOTION OPTIONS — SELECT ALL THAT APPLY</label>
+                  <div role="group" aria-label="GOOD TIMES promotion options">
+                    {GROWTH_SERVICES.map((service) => {
+                      const selected = growthServices.includes(service.value);
+                      return (
+                        <button
+                          key={service.value}
+                          type="button"
+                          aria-pressed={selected}
+                          onClick={() => setGrowthServices((current) =>
+                            selected ? current.filter((value) => value !== service.value) : [...current, service.value]
+                          )}
+                          style={css.chip(selected)}
+                        >
+                          {selected ? "✓ " : "+ "}{service.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p style={{ fontSize: 12, color: "#999", lineHeight: 1.6 }}>
+                    Choose one or more options. This requests a proposal only; availability, terms and pricing require review.
+                  </p>
+                </div>
                 <Select label="Ad Budget Range" name="ad_budget" options={AD_BUDGETS} placeholder="What's your budget?" />
                 <div style={css.field}>
                   <label style={css.label}>AD / TRADE NOTES</label>
@@ -1015,6 +1065,7 @@ export default function GTPartnerForm() {
                 ["Events", form.recurring_events.filter((e) => e.name).map((e) => `${e.day}: ${e.name}`).join(" | ") || "None"],
                 ["Ticketing", form.wants_ticketing ? "YES — 10% Commission" : "No"],
                 ["Ad Space", form.wants_ad_space ? `YES — ${AD_BUDGETS.find((b) => b.value === form.ad_budget)?.label || "TBD"}` : "No"],
+                ["Marketing Channels", form.wants_ad_space ? growthServices.map((value) => GROWTH_SERVICES.find((item) => item.value === value)?.label).filter(Boolean).join(", ") || "Discuss with team" : "Not requested"],
               ]
                 .filter(([, v]) => v)
                 .map(([label, value]) => (

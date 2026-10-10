@@ -36,6 +36,12 @@ assert.match(read('public/venue-portal/index.html'),/Email signup · Configurati
 assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_outreach_manual_fallback/);
 assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_id: prefilledVenueId/);
 assert.match(read('public/venue-portal/app.js'),/updateManualApplicationLinks/);
+assert.match(read('public/venue-portal/app.js'),/marketingApplicationUrl/);
+assert.match(read('public/venue-portal/app.js'),/window\.location\.assign\(marketingApplicationUrl/);
+assert.match(read('public/venue-portal/index.html'),/\/business\?intent=custom_bundle/);
+assert.match(read('src/components/PartnerForm.jsx'),/requestedIntent/);
+assert.match(read('src/components/PartnerForm.jsx'),/GOOD TIMES requested marketing channels/);
+assert.match(read('src/components/PartnerForm.jsx'),/PROMOTION OPTIONS/);
 assert.match(read('public/venue-portal/app.js'),/const redirect=location.origin\+'\/venues'/);
 assert.match(read('src/components/PartnerForm.jsx'),/Prefer: "return=minimal"/);
 assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_outreach_manual_fallback/);
