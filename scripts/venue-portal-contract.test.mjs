@@ -40,4 +40,5 @@ assert.match(read('public/venue-portal/app.js'),/const redirect=location.origin\
 assert.match(read('src/components/PartnerForm.jsx'),/Prefer: "return=minimal"/);
 assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_outreach_manual_fallback/);
 assert.match(read('supabase/migrations/20261009270000_gt_partner_application_notification_trigger_fix.sql'),/security definer/i);
+assert.match(read('supabase/migrations/20261009271000_gt_partner_manual_intake_muse_handoff.sql'),/manual_application_submitted/);
 console.log('GOOD TIMES venue portal static contract checks passed (3 pages, 3 scripts, route/CTA/RPC checks).');
