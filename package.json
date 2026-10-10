@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "npm run test && next build",
+    "start": "next start",
+    "test": "node scripts/venue-portal-contract.test.mjs"
   },
   "dependencies": {
     "next": "15.5.16",
