@@ -57,7 +57,7 @@ async function sendEmail(){
  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('Enter a valid business email.',true);return}
  try{
   setBusy('email-link',true)
-  const intendedVenue=state.selectedVenue?.id||new URLSearchParams(location.search).get('venue');const redirect=location.origin+'/venues'+(intendedVenue&&/^[0-9a-f-]{36}$/i.test(intendedVenue)?'?venue='+encodeURIComponent(intendedVenue):'')
+  const intendedVenue=state.selectedVenue?.id||new URLSearchParams(location.search).get('venue');if(intendedVenue&&/^[0-9a-f-]{36}$/i.test(intendedVenue))localStorage.setItem('gt_partner_pending_venue_id',intendedVenue);const redirect=location.origin+'/venues'
   await req('/auth/v1/otp?redirect_to='+encodeURIComponent(redirect),{method:'POST',auth:false,body:{email,create_user:true},headers:{'Content-Type':'application/json'}})
   sessionStorage.setItem('gt_partner_email',email)
   toast('Sign-in email requested. Check your inbox, and return to this page after verifying.')
@@ -287,7 +287,7 @@ async function main(){
  readHashAuth();state.session=getSession()
  renderMarketing();bind();await initSession()
  const qp=new URLSearchParams(location.search)
- const venueID=qp.get('venue')
+ const venueID=qp.get('venue')||localStorage.getItem('gt_partner_pending_venue_id')
  if(venueID && /^[0-9a-f]{8}-[0-9a-f-]{27,36}$/i.test(venueID)){
   view('claim')
   try{const arr=await req('/rest/v1/gt_venues?select=id,name,address,neighborhood,city_key,status,is_verified&id=eq.'+encodeURIComponent(venueID)+'&city_key=eq.atlanta&status=eq.active&limit=1',{auth:false});if(arr?.[0]){state.venues=arr;selectVenue(arr[0].id)}}catch{}
