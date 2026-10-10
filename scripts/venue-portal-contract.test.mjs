@@ -33,4 +33,8 @@ assert.match(read('public/venue-portal/outreach.html'),/NO SEND PERMISSION/);
 assert.match(read('public/venue-portal/index.html'),/Start your free venue application/);
 assert.match(read('public/venue-portal/index.html'),/Submit a manual venue application/);
 assert.match(read('public/venue-portal/index.html'),/Email signup · Configuration pending/);
+assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_outreach_manual_fallback/);
+assert.match(read('src/components/PartnerForm.jsx'),/gt_venue_id: prefilledVenueId/);
+assert.match(read('public/venue-portal/app.js'),/updateManualApplicationLinks/);
+assert.match(read('public/venue-portal/app.js'),/const redirect=location.origin\+'\/venues'/);
 console.log('GOOD TIMES venue portal static contract checks passed (3 pages, 3 scripts, route/CTA/RPC checks).');
