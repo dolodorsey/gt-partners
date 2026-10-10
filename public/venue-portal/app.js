@@ -171,9 +171,14 @@ async function showPublishedPreview(venueId){
  }catch(err){target.textContent='Current public venue details could not be loaded.'}
 }
 
+function updateManualApplicationLinks(id){
+ const href=id&&/^[0-9a-f-]{36}$/i.test(id)?'/business?venue='+encodeURIComponent(id):'/business';
+ document.querySelectorAll('a[href^="/business"]').forEach(link=>{link.href=href});
+}
 function selectVenue(id){
  const v=state.venues.find(x=>x.id===id);if(!v)return
  state.selectedVenue=v;$('selected-venue').hidden=false
+ updateManualApplicationLinks(v.id)
  $('selected-venue').innerHTML='<strong>✓ '+escaped(v.name)+'</strong><br/><small>'+escaped(v.address||'Atlanta venue')+'</small>'
  $('venue-search').value=v.name;$('venue-results').innerHTML=''
  $('unlisted').checked=false;$('manual-venue-wrap').hidden=true
@@ -273,7 +278,7 @@ function bind(){
   const serv=e.target.closest('[data-service]');if(serv){$('interest-category').value=serv.dataset.service;$('interest-form').scrollIntoView({behavior:'smooth',block:'start'})}
  })
  let searchTimer;$('venue-search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(searchVenues,350)})
- $('unlisted').addEventListener('change',e=>{const checked=e.target.checked;$('manual-venue-wrap').hidden=!checked;if(checked){state.selectedVenue=null;$('selected-venue').hidden=true;$('published-venue-preview').hidden=true;$('venue-results').innerHTML=''}})
+ $('unlisted').addEventListener('change',e=>{const checked=e.target.checked;if(checked)updateManualApplicationLinks(null);$('manual-venue-wrap').hidden=!checked;if(checked){state.selectedVenue=null;$('selected-venue').hidden=true;$('published-venue-preview').hidden=true;$('venue-results').innerHTML=''}})
  $('email-link').addEventListener('click',sendEmail)
  $('verify-code').addEventListener('click',verifyCode)
  $('password-login').addEventListener('click',signInPassword)
