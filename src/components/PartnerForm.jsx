@@ -128,7 +128,7 @@ export default function GTPartnerForm() {
       limit: "1",
     });
     fetch(SUPABASE_URL + "/rest/v1/gt_venues?" + query.toString(), {
-      headers: { apikey: SUPABASE_ANON, Authorization: "Bearer " + SUPABASE_ANON },
+      headers: { apikey: SUPABASE_ANON, Accept: "application/json" },
     }).then(async response => {
       if (!response.ok) throw new Error("Venue record unavailable");
       const rows = await response.json();
