@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 
 const SUPABASE_URL = "https://dzlmtvodpyhetvektfuo.supabase.co";
-const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6bG10dm9kcHloZXR2ZWt0ZnVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk1ODQ4NjQsImV4cCI6MjA4NTE2MDg2NH0.qmnWB4aWdb7U8Iod9Hv8PQAOJO3AG0vYEGnPS--kfAo";
+const SUPABASE_ANON = "sb_publishable_ekvoOK6QQ05dUZuWgzQfUw_2RgbWPFR";
 
 const CITIES = ["Atlanta", "Houston", "DC", "Los Angeles", "Charlotte", "Miami", "New York", "Dallas", "Chicago", "New Orleans"];
 const BUSINESS_TYPES = [
@@ -50,7 +50,7 @@ export default function GTPartnerForm() {
       const path = `applications/${ts}_${safeName}`;
       const res = await fetch(`${SUPABASE_URL}/storage/v1/object/gt-partner-assets/${path}`, {
         method: "POST",
-        headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}`, "Content-Type": file.type },
+        headers: { apikey: SUPABASE_ANON, "Content-Type": file.type },
         body: file,
       });
       if (!res.ok) throw new Error("Upload failed");
@@ -216,8 +216,7 @@ export default function GTPartnerForm() {
         headers: {
           "Content-Type": "application/json",
           apikey: SUPABASE_ANON,
-          Authorization: `Bearer ${SUPABASE_ANON}`,
-          Prefer: "return=minimal",
+                    Prefer: "return=minimal",
         },
         body: JSON.stringify(payload),
       });
@@ -781,7 +780,7 @@ export default function GTPartnerForm() {
                       try {
                         const path = `applications/gallery/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
                         const res = await fetch(`${SUPABASE_URL}/storage/v1/object/gt-partner-assets/${path}`, {
-                          method: "POST", headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}`, "Content-Type": file.type }, body: file,
+                          method: "POST", headers: { apikey: SUPABASE_ANON, "Content-Type": file.type }, body: file,
                         });
                         if (res.ok) urls.push(`${SUPABASE_URL}/storage/v1/object/public/gt-partner-assets/${path}`);
                       } catch (err) { console.error(err); }
