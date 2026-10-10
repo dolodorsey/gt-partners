@@ -204,6 +204,7 @@ async function submitClaim(e){
   setBusy('submit-claim',true)
   await req('/rest/v1/gt_portal_claims',{method:'POST',body:payload,headers:{'Content-Type':'application/json',Prefer:'return=minimal'}})
   toast('Your claim was submitted for GOOD TIMES partner verification. No public listing has changed.')
+  localStorage.removeItem('gt_partner_pending_venue_id')
   await loadPartnerData()
  }catch(err){toast('Claim not submitted: '+err.message,true)}finally{setBusy('submit-claim',false)}
 }
