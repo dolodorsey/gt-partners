@@ -172,8 +172,19 @@ async function showPublishedPreview(venueId){
 }
 
 function updateManualApplicationLinks(id){
- const href=id&&/^[0-9a-f-]{36}$/i.test(id)?'/business?venue='+encodeURIComponent(id):'/business';
- document.querySelectorAll('a[href^="/business"]').forEach(link=>{link.href=href});
+ document.querySelectorAll('a[href^="/business"]').forEach(link=>{
+  const url=new URL(link.getAttribute('href'),location.origin)
+  if(id&&/^[0-9a-f-]{36}$/i.test(id))url.searchParams.set('venue',id)
+  else url.searchParams.delete('venue')
+  link.setAttribute('href',url.pathname+url.search)
+ })
+}
+function marketingApplicationUrl(category){
+ const valid=marketing.some(item=>item[0]===category)?category:'custom_bundle'
+ const url=new URL('/business',location.origin)
+ url.searchParams.set('intent',valid)
+ if(state.selectedVenue?.id)url.searchParams.set('venue',state.selectedVenue.id)
+ return url.pathname+url.search
 }
 function selectVenue(id){
  const v=state.venues.find(x=>x.id===id);if(!v)return
@@ -232,7 +243,7 @@ async function uploadAsset(){
 async function submitInterest(e){
  e.preventDefault()
  const claim=state.claims.find(x=>x.id===$('interest-claim').value)
- if(!claim){toast('Start a venue claim before requesting a marketing proposal.',true);view('claim');return}
+ if(!claim){window.location.assign(marketingApplicationUrl($('interest-category').value));return}
  const category=$('interest-category').value
  const objective=$('interest-objective').value.trim()
  try{
@@ -275,7 +286,10 @@ function bind(){
  document.addEventListener('click',e=>{
   const btn=e.target.closest('[data-view]');if(btn){e.preventDefault();view(btn.dataset.view)}
   const venue=e.target.closest('[data-venue-id]');if(venue)selectVenue(venue.dataset.venueId)
-  const serv=e.target.closest('[data-service]');if(serv){$('interest-category').value=serv.dataset.service;$('interest-form').scrollIntoView({behavior:'smooth',block:'start'})}
+  const serv=e.target.closest('[data-service]');if(serv){
+   if(!state.session?.user?.id || !state.claims.length){window.location.assign(marketingApplicationUrl(serv.dataset.service));return}
+   $('interest-category').value=serv.dataset.service;$('interest-form').scrollIntoView({behavior:'smooth',block:'start'})
+  }
  })
  let searchTimer;$('venue-search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(searchVenues,350)})
  $('unlisted').addEventListener('change',e=>{const checked=e.target.checked;if(checked)updateManualApplicationLinks(null);$('manual-venue-wrap').hidden=!checked;if(checked){state.selectedVenue=null;$('selected-venue').hidden=true;$('published-venue-preview').hidden=true;$('venue-results').innerHTML=''}})
