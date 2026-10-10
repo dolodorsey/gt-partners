@@ -52,6 +52,7 @@ function readHashAuth(){
  }
 }
 async function sendEmail(){
+ toast('Email confirmation redirects are being configured. Please use the working manual venue application, or sign in using an existing password.',true);return;
  const email=$('partner-email').value.trim().toLowerCase()
  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('Enter a valid business email.',true);return}
  try{
