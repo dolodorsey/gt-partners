@@ -104,7 +104,7 @@ export default function PartnerRoleForm({ roleType }) {
     return (
       <Page>
         <section style={styles.card}>
-          <div style={styles.brand}>GOOD TIMES PARTNERS</div>
+          <div style={styles.brand}><img src="/brand/good-times-official.png" alt="GOOD TIMES official logo" style={{width:152,maxWidth:"100%",height:"auto",objectFit:"contain",display:"block",margin:"0 auto 10px",borderRadius:5}}/>GOOD TIMES PARTNERS</div>
           <div style={styles.successIcon}>✓</div>
           <h1 style={styles.centerTitle}>Application received</h1>
           <p style={styles.centerCopy}>{message}</p>
