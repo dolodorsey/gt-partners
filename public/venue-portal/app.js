@@ -52,11 +52,12 @@ function readHashAuth(){
  }
 }
 async function sendEmail(){
+ toast('Email confirmation redirects are being configured. Please use the working manual venue application, or sign in using an existing password.',true);return;
  const email=$('partner-email').value.trim().toLowerCase()
  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){toast('Enter a valid business email.',true);return}
  try{
   setBusy('email-link',true)
-  const intendedVenue=state.selectedVenue?.id||new URLSearchParams(location.search).get('venue');const redirect=location.origin+'/venues'+(intendedVenue&&/^[0-9a-f-]{36}$/i.test(intendedVenue)?'?venue='+encodeURIComponent(intendedVenue):'')
+  const intendedVenue=state.selectedVenue?.id||new URLSearchParams(location.search).get('venue');if(intendedVenue&&/^[0-9a-f-]{36}$/i.test(intendedVenue))localStorage.setItem('gt_partner_pending_venue_id',intendedVenue);const redirect=location.origin+'/venues'
   await req('/auth/v1/otp?redirect_to='+encodeURIComponent(redirect),{method:'POST',auth:false,body:{email,create_user:true},headers:{'Content-Type':'application/json'}})
   sessionStorage.setItem('gt_partner_email',email)
   toast('Sign-in email requested. Check your inbox, and return to this page after verifying.')
@@ -170,9 +171,14 @@ async function showPublishedPreview(venueId){
  }catch(err){target.textContent='Current public venue details could not be loaded.'}
 }
 
+function updateManualApplicationLinks(id){
+ const href=id&&/^[0-9a-f-]{36}$/i.test(id)?'/business?venue='+encodeURIComponent(id):'/business';
+ document.querySelectorAll('a[href^="/business"]').forEach(link=>{link.href=href});
+}
 function selectVenue(id){
  const v=state.venues.find(x=>x.id===id);if(!v)return
  state.selectedVenue=v;$('selected-venue').hidden=false
+ updateManualApplicationLinks(v.id)
  $('selected-venue').innerHTML='<strong>✓ '+escaped(v.name)+'</strong><br/><small>'+escaped(v.address||'Atlanta venue')+'</small>'
  $('venue-search').value=v.name;$('venue-results').innerHTML=''
  $('unlisted').checked=false;$('manual-venue-wrap').hidden=true
@@ -203,6 +209,7 @@ async function submitClaim(e){
   setBusy('submit-claim',true)
   await req('/rest/v1/gt_portal_claims',{method:'POST',body:payload,headers:{'Content-Type':'application/json',Prefer:'return=minimal'}})
   toast('Your claim was submitted for GOOD TIMES partner verification. No public listing has changed.')
+  localStorage.removeItem('gt_partner_pending_venue_id')
   await loadPartnerData()
  }catch(err){toast('Claim not submitted: '+err.message,true)}finally{setBusy('submit-claim',false)}
 }
@@ -271,7 +278,7 @@ function bind(){
   const serv=e.target.closest('[data-service]');if(serv){$('interest-category').value=serv.dataset.service;$('interest-form').scrollIntoView({behavior:'smooth',block:'start'})}
  })
  let searchTimer;$('venue-search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(searchVenues,350)})
- $('unlisted').addEventListener('change',e=>{const checked=e.target.checked;$('manual-venue-wrap').hidden=!checked;if(checked){state.selectedVenue=null;$('selected-venue').hidden=true;$('published-venue-preview').hidden=true;$('venue-results').innerHTML=''}})
+ $('unlisted').addEventListener('change',e=>{const checked=e.target.checked;if(checked)updateManualApplicationLinks(null);$('manual-venue-wrap').hidden=!checked;if(checked){state.selectedVenue=null;$('selected-venue').hidden=true;$('published-venue-preview').hidden=true;$('venue-results').innerHTML=''}})
  $('email-link').addEventListener('click',sendEmail)
  $('verify-code').addEventListener('click',verifyCode)
  $('password-login').addEventListener('click',signInPassword)
@@ -286,7 +293,7 @@ async function main(){
  readHashAuth();state.session=getSession()
  renderMarketing();bind();await initSession()
  const qp=new URLSearchParams(location.search)
- const venueID=qp.get('venue')
+ const venueID=qp.get('venue')||localStorage.getItem('gt_partner_pending_venue_id')
  if(venueID && /^[0-9a-f]{8}-[0-9a-f-]{27,36}$/i.test(venueID)){
   view('claim')
   try{const arr=await req('/rest/v1/gt_venues?select=id,name,address,neighborhood,city_key,status,is_verified&id=eq.'+encodeURIComponent(venueID)+'&city_key=eq.atlanta&status=eq.active&limit=1',{auth:false});if(arr?.[0]){state.venues=arr;selectVenue(arr[0].id)}}catch{}

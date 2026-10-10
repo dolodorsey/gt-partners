@@ -92,6 +92,51 @@ export default function GTPartnerForm() {
     ad_notes: "",
   });
 
+  const [prefilledVenueId, setPrefilledVenueId] = useState(null);
+  const [prefillMessage, setPrefillMessage] = useState("");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const requestedId = params.get("venue");
+    if (!/^[0-9a-f]{8}-[0-9a-f-]{27,36}$/i.test(requestedId || "")) return;
+    let active = true;
+    const query = new URLSearchParams({
+      select: "id,name,address,website,instagram_handle,neighborhood,category_key,city_key",
+      id: "eq." + requestedId,
+      city_key: "eq.atlanta",
+      status: "eq.active",
+      is_verified: "eq.true",
+      limit: "1",
+    });
+    fetch(SUPABASE_URL + "/rest/v1/gt_venues?" + query.toString(), {
+      headers: { apikey: SUPABASE_ANON, Authorization: "Bearer " + SUPABASE_ANON },
+    }).then(async response => {
+      if (!response.ok) throw new Error("Venue record unavailable");
+      const rows = await response.json();
+      if (!active) return;
+      const venue = rows?.[0];
+      if (!venue || venue.id !== requestedId) {
+        setPrefillMessage("This invitation is under review. You may still submit your business details manually.");
+        return;
+      }
+      setPrefilledVenueId(venue.id);
+      setForm(old => ({
+        ...old,
+        business_name: old.business_name || venue.name || "",
+        business_type: old.business_type || (["restaurant","bar","food","food_and_dining","coffee"].includes(venue.category_key) ? "restaurant" : "venue"),
+        city: old.city || "Atlanta",
+        address: old.address || venue.address || "",
+        neighborhood: old.neighborhood || venue.neighborhood || "",
+        website: old.website || venue.website || "",
+        instagram_handle: old.instagram_handle || venue.instagram_handle || "",
+      }));
+      setPrefillMessage("We found your existing GOOD TIMES Atlanta venue listing. Confirm all details below; submission is a request, not automatic ownership verification.");
+    }).catch(() => {
+      if (active) setPrefillMessage("We could not verify the linked venue. Please complete your business application manually.");
+    });
+    return () => { active = false; };
+  }, []);
+
   const update = (key, val) => setForm((p) => ({ ...p, [key]: val }));
 
   const toggleVibe = (v) => {
@@ -147,6 +192,8 @@ export default function GTPartnerForm() {
     try {
       const payload = {
         ...form,
+        gt_venue_id: prefilledVenueId,
+        source: prefilledVenueId ? "gt_venue_outreach_manual_fallback" : "gt_public_partner_application",
         specials: JSON.stringify(form.specials.filter((s) => s.name)),
         happy_hour: JSON.stringify(form.happy_hour),
         recurring_events: JSON.stringify(form.recurring_events.filter((e) => e.name)),
@@ -170,7 +217,7 @@ export default function GTPartnerForm() {
           "Content-Type": "application/json",
           apikey: SUPABASE_ANON,
           Authorization: `Bearer ${SUPABASE_ANON}`,
-          Prefer: "return=representation",
+          Prefer: "return=minimal",
         },
         body: JSON.stringify(payload),
       });
@@ -596,6 +643,8 @@ export default function GTPartnerForm() {
             Get your venue, brand, or event featured on Good Times — the premier nightlife, dining & entertainment app. Submit your details below for review.
           </div>
         </div>
+
+        {prefillMessage && <div role="status" style={{ margin: "0 auto 24px", padding: "16px 20px", maxWidth: 820, background: "rgba(212,168,83,.1)", border: "1px solid rgba(212,168,83,.5)", borderRadius: 10, color: "#F0EDE6", fontSize: 13, lineHeight: 1.6 }}>{prefillMessage}</div>}
 
         {/* STEPPER */}
         <div style={css.stepper}>
