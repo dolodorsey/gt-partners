@@ -30,5 +30,7 @@ assert.match(read('public/venue-portal/app.js'),/gt_portal_media/);
 assert.match(read('public/venue-portal/admin.js'),/gt_portal_staff_profile/);
 assert.match(read('public/venue-portal/outreach.js'),/gt_portal_outreach_page/);
 assert.match(read('public/venue-portal/outreach.html'),/NO SEND PERMISSION/);
-assert.match(read('public/venue-portal/index.html'),/Claim your free venue profile/);
+assert.match(read('public/venue-portal/index.html'),/Start your free venue application/);
+assert.match(read('public/venue-portal/index.html'),/Submit a manual venue application/);
+assert.match(read('public/venue-portal/index.html'),/Email signup · Configuration pending/);
 console.log('GOOD TIMES venue portal static contract checks passed (3 pages, 3 scripts, route/CTA/RPC checks).');
